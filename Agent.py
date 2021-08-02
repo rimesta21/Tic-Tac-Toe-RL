@@ -28,6 +28,26 @@ class Agent:
             if currValue >= maxValue:
                 maxValue = currValue
                 move = i
-    
+    self.states.append(move)
     return move
+
+    def updatePositionValue(self, reward):
+        for i in reversed(self.states):
+            reward = self.positionValues[i] + self.lr * (reward - self.positionValues[i])
+            self.positionValues[i] = reward
+    
+    def reset(self, symbol):
+        self.symbol = symbol
+        self.states = []
+                
+    
+    def saveValues(self, fileName):
+        f = open(fileName, "w+")
         
+        for i in range(self.positionValues.shape[0]):
+            for j in self.positionValues[i]:
+               f.write(str(j) + ", ")
+            f.write("\n")
+        f.close()
+        
+    

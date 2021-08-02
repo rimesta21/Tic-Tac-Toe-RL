@@ -11,6 +11,7 @@ class GameDriver:
     def __init__(self):
         self.board = np.full((3,3), '-')
         self.validMoves = []
+        self.copyMoves = []
         for i in range(3):
             for j in range(3):
                 self.validMoves.append((i,j))
