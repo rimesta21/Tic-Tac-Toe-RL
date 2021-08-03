@@ -5,7 +5,7 @@ Created on Fri Jul 30 11:23:06 2021
 @author: rimes
 """
 
-import nupmy as np
+import numpy as np
 
 class Agent:
   def __init__(self, symbol):
@@ -21,7 +21,7 @@ class Agent:
     move = ()
     
     if np.random.uniform(0,1) <= self.expr:
-        move = np.random.choice(validMoves)
+        move = validMoves[np.random.randint(len(validMoves))]
     else:
         for i in validMoves:
             currValue = self.positionValues[i]
@@ -31,23 +31,29 @@ class Agent:
     self.states.append(move)
     return move
 
-    def updatePositionValue(self, reward):
-        for i in reversed(self.states):
-            reward = self.positionValues[i] + self.lr * (reward - self.positionValues[i])
-            self.positionValues[i] = reward
+  def updatePositionValue(self, symbol):
+      if symbol == self.symbol:
+          reward = 1
+      elif symbol == '-':
+          reward = 0
+      else:
+          reward = -1
+      for i in reversed(self.states):
+          reward = self.positionValues[i] + self.lr * (reward - self.positionValues[i])
+          self.positionValues[i] = reward
     
-    def reset(self, symbol):
-        self.symbol = symbol
-        self.states = []
+  def reset(self, symbol):
+      self.symbol = symbol
+      self.states = []
                 
     
-    def saveValues(self, fileName):
-        f = open(fileName, "w+")
+  def saveValues(self, fileName):
+      f = open(fileName, "w+")
         
-        for i in range(self.positionValues.shape[0]):
-            for j in self.positionValues[i]:
-               f.write(str(j) + ", ")
-            f.write("\n")
-        f.close()
+      for i in range(self.positionValues.shape[0]):
+          for j in self.positionValues[i]:
+             f.write(str(j) + ", ")
+          f.write("\n")
+      f.close()
         
     

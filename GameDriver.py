@@ -6,10 +6,13 @@ Created on Fri Jul 30 11:34:35 2021
 """
 
 import numpy as np
+from Agent import Agent
+
+
 
 class GameDriver:
     def __init__(self):
-        self.board = np.full((3,3), '-')
+        self.board = np.array(range(1,10), dtype = str).reshape(3,3)
         self.validMoves = []
         self.copyMoves = []
         for i in range(3):
@@ -50,11 +53,85 @@ class GameDriver:
             j -= 1
         if all(temp):
             return 1
-        #check for tie
-        if '-' not in self.board:
-            return 0
         #no winner
         return -1
+    
+    def printBoard(self):
+        print(self.board)
+        print()
+        
+if __name__ == "__main__":
+    print("Welcome to Tic-Tac-Toe!")
+    cont = 'y'
+    reset = False
+    while cont == 'y':
+        gd = GameDriver()
+        userSym = ''
+        userIn = input("Would you like to go first or second?. Press f for first and anything else for second.\n")
+        if userIn.lower() == 'f':
+            userSym = 'X'
+            if not reset:
+                ag = Agent('O')
+            else:
+                ag.reset('O')
+        else:
+            userSym = 'O'
+            if not reset:
+                ag = Agent('X')
+            else:
+                ag.reset('X')
+        print("Okay great. Here is the starting board.")
+        gd.printBoard()
+        
+        turn = 'O'
+        count = 0
+        tie = True
+        #I'd prefer a do while but you know how it goes 
+        while count < 10:
+            #this is done so that turn can be presevred when the game ends
+            if turn == 'O':
+                turn = 'X'
+            else:
+                turn = 'O'
+            
+            if userSym == turn:
+                while True:
+                    userIn = int(input(prompt = "Please select an open position from 1-9.\n"))
+                    if gd.userInputToCorrdinate(userIn) not in gd.validMoves:
+                        print("I'm sorry that position is not availible. Please choice another.")
+                    else:
+                        break
+                print()
+                    
+                gd.board[gd.userInputToCorrdinate(userIn)] = turn
+                print("Your move has been made. This is the new board.")
+                gd.printBoard()
+                gd.validMoves.remove(gd.userInputToCorrdinate(userIn))
+            else:
+                move = ag.makeMove(gd.validMoves)
+                gd.board[move] = turn
+                print("The computer has made their move. This is the new board.")
+                gd.printBoard()
+                gd.validMoves.remove(move)
+            if gd.checkWinner() == 1:
+                print("Congratulations!! Looks like " + turn + " was paying attention.")
+                tie = False
+                break
+        if tie:
+            print("Looks like its a Tie! Good match!")
+            turn = '-'
+        ag.updatePositionValue(turn)
+            
+        print()
+        cont = input("Would you like to play another game? Press y for yes and anything else for no.\n")
+        if cont == 'y':
+            print(ag.positionValues)
+            reset = True
+    
+    save = input("Admin Question: Would you like to update the agent?\n")
+    if save == 'y':
+        fileName = input("What is the name of the file?\n")
+        ag.saveValues(fileName)
             
                 
         
