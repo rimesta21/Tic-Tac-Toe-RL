@@ -87,7 +87,7 @@ if __name__ == "__main__":
         count = 0
         tie = True
         #I'd prefer a do while but you know how it goes 
-        while count < 10:
+        while count < 9:
             #this is done so that turn can be presevred when the game ends
             if turn == 'O':
                 turn = 'X'
@@ -117,6 +117,7 @@ if __name__ == "__main__":
                 print("Congratulations!! Looks like " + turn + " was paying attention.")
                 tie = False
                 break
+            count += 1
         if tie:
             print("Looks like its a Tie! Good match!")
             turn = '-'
