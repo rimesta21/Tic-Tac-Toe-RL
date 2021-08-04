@@ -117,6 +117,7 @@ if __name__ == "__main__":
                 print("Congratulations!! Looks like " + turn + " was paying attention.")
                 tie = False
                 break
+            count += 1
         if tie:
             print("Looks like its a Tie! Good match!")
             turn = '-'

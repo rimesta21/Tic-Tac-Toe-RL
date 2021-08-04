@@ -8,20 +8,24 @@ Created on Fri Jul 30 11:23:06 2021
 import numpy as np
 
 class Agent:
-  def __init__(self, symbol):
+  def __init__(self, symbol = '-'):
     self.positionValues = np.zeros((3,3))
     self.symbol = symbol
     self.states = []
     self.lr = 0.2
     self.expr = 0.3
+
+  def setSymbol(self, symbol):
+      self.symbol = symbol
   
   
   def makeMove(self, validMoves):
-    maxValue = 0
+    #In the case where the remaining positions are all negative  
+    maxValue = -1.1
     move = ()
     
     if np.random.uniform(0,1) <= self.expr:
-        move = validMoves[np.random.randint(len(validMoves))]
+        move = validMoves[np.random.randint(len(validMoves) - 1)]
     else:
         for i in validMoves:
             currValue = self.positionValues[i]
